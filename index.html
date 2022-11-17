@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, shrink-to-fit=no">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css"
+        integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" href="./css/index.css">
+    <title>Index</title>
+</head>
+<body>
+    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Novo</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div id="txtIdSchRec"></div>
+                        <div class="col-6">
+                            <label for="txtAluno">Nome</label>
+                            <input id="txtAluno" class="form-control" type="text">
+                        </div>
+                        <div class="col-3">
+                            <label for="txtNota">Nota</label>
+                            <input id="txtNota" class="form-control" type="text">
+                        </div>
+                        <div class="col-3">
+                            <label for="txtCargaHoraria">Duração</label>
+                            <input id="txtCargaHoraria" class="form-control" type="text">
+                        </div>
+                        <div class="col-6">
+                            <label for="txtDisciplina">Disciplina</label>
+                            <input id="txtDisciplina" class="form-control" type="text">
+                        </div>
+                        <div class="col-6">
+                            <label for="txtDtEntrega">Data de Entrega</label>
+                            <input id="txtDtEntrega" class="form-control" type="text">
+                        </div>
+                        <div class="col-6">
+                            <label for="txtEmail">Email</label>
+                            <input id="txtEmail" class="form-control" type="text">
+                        </div>
+                        <div class="col-6">
+                            <label for="txtDtNascimento">Data de Nascimento</label>
+                            <input id="txtDtNascimento" class="form-control" type="text">
+                        </div>
+                        <span id="spanInvalidFields">Por favor preencher todos os campos</span>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button id="btnSair" type="button" class="btn btn-secondary" onclick="hiddenShowSpan();" data-dismiss="modal">Sair</button>
+                    <button id="btnSalvar" type="button" class="btn btn-primary">Salvar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="py-5">
+        <div class="container">
+            <button id="btnAddNew" type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal" data-backdrop="static" data-keyboard="false">Novo</button>
+            <div id="cardsSchoolRecords" class="row"></div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js"></script>
+    <script src="https://pingendo.com/assets/bootstrap/bootstrap-4.0.0-alpha.6.min.js"></script>
+    <script src="./js/ajax.js"></script>
+    <script src="./js/schoolRecord.js"></script>
+    <script src="./js/api.js"></script>
+    <script src="./js/index.js"></script>
+</body>
+</html>

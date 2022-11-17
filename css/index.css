@@ -1,0 +1,19 @@
+#btnDel{
+    background-color: #A41B29;
+    color: white;
+    margin-left: 2%;
+    margin-right: 1%;
+    margin-bottom: 1%;
+}
+
+#spanInvalidFields{
+    color: #A41B29;
+    display: none;
+    font-weight: bold;
+    margin-left: 3%;
+    margin-top: 3%;
+}
+
+#btnAddNew{
+    margin-bottom: 1%;
+}
