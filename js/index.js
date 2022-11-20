@@ -1,10 +1,4 @@
-var newIdSchRec = 0;
-
-function getNewIdSchRec(){
-  let newId = "newId";
-  newIdSchRec = newIdSchRec + 1;
-  return newId + newIdSchRec;
-}
+$(":input").inputmask();
 
 (function () {
   try {
@@ -18,7 +12,7 @@ function getNewIdSchRec(){
 async function populateCards() {
   try {
     let res = await API.getSchoolRecords();
-    if (!isNullOrEmpty(res.body)) {
+    if (!Validation.isNullOrEmpty(res.body)) {
       schoolRecords = JSON.parse(res.body);
       schoolRecords.forEach(createCards);
     }
@@ -61,8 +55,10 @@ function getCard(schRec) {
     "<p class='card-text p-y-1'><span>Data Nascimento: </span>" +
     getStringDtBirth(new Date(schRec.Student.BirthDate)) +
     "</p>" +
-    "<a id='btnUpdate' href='#' class='btn btn-primary'>Alterar</a>" +
-    "<button id='btnDel' href='#' value='" +
+    "<button id='btnUpdate' value='" +
+    schRec.BulletinGrade.Id +
+    "' class='btn btn-primary'>Alterar</button>" +
+    "<button id='btnDel' value='" +
     schRec.BulletinGrade.Id +
     "' class='btn btn-primary'>Deletar</button>" +
     "</div>" +
@@ -72,12 +68,8 @@ function getCard(schRec) {
   return card;
 }
 
-function isNullOrEmpty(info) {
-  return ((info === "") || (info === null) || (info === undefined)) ? true : false;
-}
-
 function getStringDate(dt) {
-  if (!isNullOrEmpty(dt)) {
+  if (!Validation.isNullOrEmpty(dt)) {
     var minute = dt.getMinutes().toString();
     return `${dt.getDate()}/${dt.getMonth() < 12 ? dt.getMonth() + 1 : 1}/${dt.getFullYear()} ${dt.getHours()}:${
       minute.length == 1 ? "0" + minute : minute
@@ -88,62 +80,94 @@ function getStringDate(dt) {
 }
 
 function getStringDtBirth(dt) {
-  if (!isNullOrEmpty(dt)) {
+  if (!Validation.isNullOrEmpty(dt)) {
     return `${dt.getDate()}/${dt.getMonth() < 12 ? dt.getMonth() + 1 : 1}/${dt.getFullYear()}`;
   } else {
     return "";
   }
 }
 
-const Event = {
+const Btn = {
   btnSalvar: "btnSalvar",
   btnUpdate: "btnUpdate",
   btnDel: "btnDel",
 };
 
+const Event = {
+  post: "POST",
+  put: "PUT",
+};
+
 document.addEventListener("click", function (e) {
   let event = e.target.id;
-  if (event === Event.btnSalvar) postSchoolRecords();
-  if (event === Event.btnDel) delSchoolRecord(e.target.value);
-
-  let id = e.target.value;
-
-  let schRec = schoolRecords.filter((s) => s.BulletinGrade.Id == id);
+  if (event === Btn.btnDel) delSchoolRecord(e.target.value);
+  if (event === Btn.btnSalvar) {
+    if (sessionStorage.getItem("methodRequest") == Event.post) postSchoolRecords();
+    else putSchoolRecords();
+  }
 });
 
-function postSchoolRecords() {
-  if(isValidFields()){
-    document.getElementById("txtIdSchRec").value = getNewIdSchRec();
-    var newSchoolRec = SchoolRecord.getSchoolRecord("POST");
-    API.postSchoolRecords(newSchoolRec);
-  }
-  else{
+function insertOrUpdateSchoolRecord() {
+  if (Validation.isValidFields()) {
+  } else {
     document.getElementById("spanInvalidFields").style.display = "block";
   }
 }
 
-function delSchoolRecord(idBulletinGrade){
-  API.delSchoolRecords(idBulletinGrade);
-}
-
-function getNewSchoolRec(){
-  const scRec = {
-
+function putSchoolRecords() {
+  if (Validation.isValidFields()) {
+    let oldSchoolRec = SchoolRecord.getSchoolRecord();
+    API.putSchoolRecords(oldSchoolRec);
+  } else {
+    Validation.showSpanInvalidField();
   }
 }
 
-function isValidFields(){
-  return !isNullOrEmpty(document.getElementById("txtAluno").value == "")
-  && !isNullOrEmpty(document.getElementById("txtNota").value)
-  && !isNullOrEmpty(document.getElementById("txtCargaHoraria").value)
-  && !isNullOrEmpty(document.getElementById("txtDisciplina").value)
-  && !isNullOrEmpty(document.getElementById("txtDtEntrega").value)
-  && !isNullOrEmpty(document.getElementById("txtEmail").value)
-  && !isNullOrEmpty(document.getElementById("txtDtNascimento").value)
-  && !isNullOrEmpty(document.getElementById("txtCargaHoraria").value)
-  ? true : false;
+function postSchoolRecords() {
+  if (Validation.isValidFields()) {
+    let newSchoolRec = SchoolRecord.getSchoolRecord();
+    API.postSchoolRecords(newSchoolRec);
+  } else {
+    Validation.showSpanInvalidField();
+  }
 }
 
-function hiddenShowSpan(){
-  document.getElementById("spanInvalidFields").style.display = "none";
+function delSchoolRecord(idBulletinGrade) {
+  API.delSchoolRecords(idBulletinGrade);
 }
+
+$(document).on("click", "#btnUpdate", function (e) {
+  sessionStorage.setItem("methodRequest", Event.put);
+  $("#mdIdModal").modal("show");
+
+  let idBulletinGrade = e.target.value;
+  let schoolRec = schoolRecords.filter((s) => s.BulletinGrade.Id == idBulletinGrade);
+  $("#txtAluno").val(schoolRec[0].Student.Name);
+  $("#txtNota").val(schoolRec[0].BulletinGrade.Grade);
+  $("#txtCargaHoraria").val(schoolRec[0].Discipline.Workload);
+  $("#txtDisciplina").val(schoolRec[0].Discipline.Name);
+  $("#txtDtEntrega").val(getStringDate(new Date(schoolRec[0].Bulletin.DeliveryDate)));
+  $("#txtEmail").val(schoolRec[0].Student.Email);
+  $("#txtDtNascimento").val(getStringDtBirth(new Date(schoolRec[0].Student.BirthDate)));
+
+  $("#dvIdStudent").val(schoolRec[0].Student.Id);
+  $("#dvIdDiscipline").val(schoolRec[0].Discipline.Id);
+  $("#dvIdBulletin").val(schoolRec[0].Bulletin.Id);
+  $("#dvIdBulletinGrade").val(schoolRec[0].BulletinGrade.Id);
+});
+
+$("#btnAddNew").click(function () {
+  sessionStorage.setItem("methodRequest", Event.post);
+  $("#txtAluno").val("");
+  $("#txtNota").val("");
+  $("#txtCargaHoraria").val("");
+  $("#txtDisciplina").val("");
+  $("#txtDtEntrega").val("");
+  $("#txtEmail").val("");
+  $("#txtDtNascimento").val("");
+
+  $("#dvIdStudent").val(0);
+  $("#dvIdDiscipline").val(0);
+  $("#dvIdBulletin").val(0);
+  $("#dvIdBulletinGrade").val(0);
+});
