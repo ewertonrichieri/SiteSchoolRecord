@@ -10,8 +10,9 @@
     <link rel="stylesheet" href="./css/index.css">
     <title>Index</title>
 </head>
+
 <body>
-    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    <div class="modal fade" id="mdIdModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
         aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
@@ -23,7 +24,6 @@
                 </div>
                 <div class="modal-body">
                     <div class="row">
-                        <div id="txtIdSchRec"></div>
                         <div class="col-6">
                             <label for="txtAluno">Nome</label>
                             <input id="txtAluno" class="form-control" type="text">
@@ -42,7 +42,8 @@
                         </div>
                         <div class="col-6">
                             <label for="txtDtEntrega">Data de Entrega</label>
-                            <input id="txtDtEntrega" class="form-control" type="text">
+                            <input id="txtDtEntrega" class="form-control" type="text"
+                                data-inputmask="'alias': 'datetime'">
                         </div>
                         <div class="col-6">
                             <label for="txtEmail">Email</label>
@@ -50,13 +51,19 @@
                         </div>
                         <div class="col-6">
                             <label for="txtDtNascimento">Data de Nascimento</label>
-                            <input id="txtDtNascimento" class="form-control" type="text">
+                            <input id="txtDtNascimento" class="form-control" type="text"
+                                data-inputmask="'alias': 'date'">
                         </div>
                         <span id="spanInvalidFields">Por favor preencher todos os campos</span>
                     </div>
+                    <div id="dvIdStudent"></div>
+                    <div id="dvIdDiscipline"></div>
+                    <div id="dvIdBulletin"></div>
+                    <div id="dvIdBulletinGrade"></div>
                 </div>
                 <div class="modal-footer">
-                    <button id="btnSair" type="button" class="btn btn-secondary" onclick="hiddenShowSpan();" data-dismiss="modal">Sair</button>
+                    <button id="btnSair" type="button" class="btn btn-secondary" onclick="hiddenShowSpan();"
+                        data-dismiss="modal">Sair</button>
                     <button id="btnSalvar" type="button" class="btn btn-primary">Salvar</button>
                 </div>
             </div>
@@ -65,17 +72,24 @@
 
     <div class="py-5">
         <div class="container">
-            <button id="btnAddNew" type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal" data-backdrop="static" data-keyboard="false">Novo</button>
+            <button id="btnAddNew" type="button" class="btn btn-success" data-toggle="modal" data-target="#mdIdModal"
+                data-backdrop="static" data-keyboard="false">Novo</button>
             <div id="cardsSchoolRecords" class="row"></div>
         </div>
     </div>
 
     <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js"></script>
-    <script src="https://pingendo.com/assets/bootstrap/bootstrap-4.0.0-alpha.6.min.js"></script>
+
+
     <script src="./js/ajax.js"></script>
+    <script type='text/javascript'
+        src="https://rawgit.com/RobinHerbots/jquery.inputmask/3.x/dist/jquery.inputmask.bundle.js"></script>
+    <script src="https://pingendo.com/assets/bootstrap/bootstrap-4.0.0-alpha.6.min.js"></script>
     <script src="./js/schoolRecord.js"></script>
     <script src="./js/api.js"></script>
+    <script src="./js/validation.js"></script>
     <script src="./js/index.js"></script>
 </body>
+
 </html>
